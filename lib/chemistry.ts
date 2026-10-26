@@ -40,11 +40,12 @@ export function balanceEquation(input: string): { equation: string; atoms: Recor
     for (let value = 1; value <= 12 && !coeff; value++) search(index + 1, [...candidate, value]);
   };
   search(0, []);
-  if (!coeff) return null;
-  const divisor = coeff.reduce(gcd);
-  coeff = coeff.map((x) => x / divisor);
-  const format = (terms: string[], offset: number) => terms.map((term, i) => `${coeff![offset + i] === 1 ? '' : coeff![offset + i] + ' '}${term}`).join(' + ');
+  const solvedCoefficients = coeff as number[] | null;
+  if (!solvedCoefficients) return null;
+  const divisor = solvedCoefficients.reduce(gcd);
+  const normalizedCoefficients = solvedCoefficients.map((x: number) => x / divisor);
+  const format = (terms: string[], offset: number) => terms.map((term, i) => `${normalizedCoefficients[offset + i] === 1 ? '' : normalizedCoefficients[offset + i] + ' '}${term}`).join(' + ');
   const counts: Record<string, { before: number; after: number }> = {};
-  all.forEach((atom, rowIndex) => { counts[atom] = { before: left.reduce((s, _, i) => s + rows[rowIndex][i] * coeff![i], 0) + right.reduce((s, _, i) => s + Math.max(0, -rows[rowIndex][left.length + i] * coeff![left.length + i]), 0), after: rows[rowIndex].reduce((s, v, i) => s + Math.abs(v) * coeff![i], 0) / 2 }; });
+  all.forEach((atom, rowIndex) => { counts[atom] = { before: left.reduce((s, _, i) => s + rows[rowIndex][i] * normalizedCoefficients[i], 0), after: right.reduce((s, _, i) => s + rows[rowIndex][left.length + i] * -normalizedCoefficients[left.length + i], 0) }; });
   return { equation: `${format(left, 0)} → ${format(right, left.length)}`, atoms: counts };
 }

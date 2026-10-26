@@ -3556,15 +3556,16 @@ function balanceEquation(input) {
         ]);
     };
     search(0, []);
-    if (!coeff) return null;
-    const divisor = coeff.reduce(gcd);
-    coeff = coeff.map((x)=>x / divisor);
-    const format = (terms, offset)=>terms.map((term, i)=>`${coeff[offset + i] === 1 ? '' : coeff[offset + i] + ' '}${term}`).join(' + ');
+    const solvedCoefficients = coeff;
+    if (!solvedCoefficients) return null;
+    const divisor = solvedCoefficients.reduce(gcd);
+    const normalizedCoefficients = solvedCoefficients.map((x)=>x / divisor);
+    const format = (terms, offset)=>terms.map((term, i)=>`${normalizedCoefficients[offset + i] === 1 ? '' : normalizedCoefficients[offset + i] + ' '}${term}`).join(' + ');
     const counts = {};
     all.forEach((atom, rowIndex)=>{
         counts[atom] = {
-            before: left.reduce((s, _, i)=>s + rows[rowIndex][i] * coeff[i], 0) + right.reduce((s, _, i)=>s + Math.max(0, -rows[rowIndex][left.length + i] * coeff[left.length + i]), 0),
-            after: rows[rowIndex].reduce((s, v, i)=>s + Math.abs(v) * coeff[i], 0) / 2
+            before: left.reduce((s, _, i)=>s + rows[rowIndex][i] * normalizedCoefficients[i], 0),
+            after: right.reduce((s, _, i)=>s + rows[rowIndex][left.length + i] * -normalizedCoefficients[left.length + i], 0)
         };
     });
     return {
