@@ -33,14 +33,15 @@ export function balanceEquation(input: string): { equation: string; atoms: Recor
   if (parsed.some((x) => !Object.keys(x).length)) return null;
   const all = [...new Set(parsed.flatMap((x) => Object.keys(x)))];
   const rows = all.map((atom) => parsed.map((formula, i) => (i < left.length ? 1 : -1) * (formula[atom] || 0)));
-  let coeff: number[] | null = null;
-  const search = (index: number, candidate: number[]) => {
-    if (coeff) return;
-    if (index === candidate.length) { if (rows.every((row) => row.reduce((sum, v, i) => sum + v * candidate[i], 0) === 0)) coeff = [...candidate]; return; }
-    for (let value = 1; value <= 12 && !coeff; value++) search(index + 1, [...candidate, value]);
+  const search = (index: number, candidate: number[]): number[] | null => {
+    if (index === parsed.length) return rows.every((row) => row.reduce((sum, value, column) => sum + value * candidate[column], 0) === 0) ? candidate : null;
+    for (let value = 1; value <= 12; value++) {
+      const result = search(index + 1, [...candidate, value]);
+      if (result) return result;
+    }
+    return null;
   };
-  search(0, []);
-  const solvedCoefficients = coeff as number[] | null;
+  const solvedCoefficients: number[] | null = search(0, []);
   if (!solvedCoefficients) return null;
   const divisor = solvedCoefficients.reduce(gcd);
   const normalizedCoefficients = solvedCoefficients.map((x: number) => x / divisor);

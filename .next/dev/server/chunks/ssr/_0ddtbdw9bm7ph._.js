@@ -3498,22 +3498,18 @@ function balanceEquation(input) {
         ...new Set(parsed.flatMap((x)=>Object.keys(x)))
     ];
     const rows = all.map((atom)=>parsed.map((formula, i)=>(i < left.length ? 1 : -1) * (formula[atom] || 0)));
-    let coeff = null;
     const search = (index, candidate)=>{
-        if (coeff) return;
-        if (index === candidate.length) {
-            if (rows.every((row)=>row.reduce((sum, v, i)=>sum + v * candidate[i], 0) === 0)) coeff = [
-                ...candidate
-            ];
-            return;
+        if (index === parsed.length) return rows.every((row)=>row.reduce((sum, value, column)=>sum + value * candidate[column], 0) === 0) ? candidate : null;
+        for(let value = 1; value <= 12; value++){
+            const result = search(index + 1, [
+                ...candidate,
+                value
+            ]);
+            if (result) return result;
         }
-        for(let value = 1; value <= 12 && !coeff; value++)search(index + 1, [
-            ...candidate,
-            value
-        ]);
+        return null;
     };
-    search(0, []);
-    const solvedCoefficients = coeff;
+    const solvedCoefficients = search(0, []);
     if (!solvedCoefficients) return null;
     const divisor = solvedCoefficients.reduce(gcd);
     const normalizedCoefficients = solvedCoefficients.map((x)=>x / divisor);
