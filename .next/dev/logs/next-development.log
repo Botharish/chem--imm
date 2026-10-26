@@ -123,3 +123,4 @@
 {"timestamp":"00:35:38.151","source":"Server","level":"LOG","message":"  Turbopack has seen frequent file updates and is waiting for the filesystem to settle (0.5s elapsed so far; last modified: \"/Users/harishyadhev/Documents/immthiyas/node_modules/next/dist/esm/shared/lib/router/routes\")."}
 {"timestamp":"00:35:54.487","source":"Server","level":"LOG","message":"  Turbopack has seen frequent file updates and is waiting for the filesystem to settle (0.5s elapsed so far; last modified: \"/Users/harishyadhev/Documents/immthiyas/node_modules/next/dist/esm/server/web/spec-extension\")."}
 {"timestamp":"00:36:08.070","source":"Server","level":"LOG","message":"  Turbopack has seen frequent file updates and is waiting for the filesystem to settle (0.5s elapsed so far; last modified: \"/Users/harishyadhev/Documents/immthiyas/node_modules/next/dist/esm/client/dev\")."}
+{"timestamp":"00:39:26.097","source":"Server","level":"LOG","message":"✓ Compiled in 125ms"}

@@ -110,7 +110,7 @@ function MolecularStudio() {
         setBusy(true);
         setError('');
         try {
-            const r = await fetch(`${process.env.NEXT_PUBLIC_CHEMSPHERE_API ?? 'http://localhost:8000'}/api/structure`, {
+            const r = await fetch(`${process.env.NEXT_PUBLIC_CHEMSPHERE_API ?? ''}/api/structure`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
